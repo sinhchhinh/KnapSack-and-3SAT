@@ -1,45 +1,41 @@
 import java.util.ArrayList;
 
 public class KnapSackAlgo 
-{
-	private ArrayList<Double> tempSortObjects;
-	
+{	
 	private int[][] minCost;
 	private boolean [][] take;
+	private ArrayList<Double> tempSortObjects;
 	private ArrayList<Integer> solution = new ArrayList<Integer>();
-	private ArrayList<Integer> originalValue = new ArrayList<Integer>();
-	private ArrayList<Integer> v = new ArrayList<Integer>();
-	private ArrayList<Integer> w = new ArrayList<Integer>();
+	private ArrayList<Integer> originalVal = new ArrayList<Integer>();
+	private ArrayList<Integer> valList = new ArrayList<Integer>();
+	private ArrayList<Integer> weightList = new ArrayList<Integer>();
 
 	public KnapSackAlgo()
 	{
-		originalValue = null;
+		originalVal = null;
 	}
 	
-	//***********************************************************************
-	//DYNAMIC O(N.W) KNAPSACK
-	//***********************************************************************
-	// Returns the maximum value that can be put in a knapsack of capacity W
-	public int dpKnapSack(ArrayList <Integer> value, ArrayList <Integer> weight, int index, int totalWeight)
+	/**
+	 * DYNAMIC O(N.W) KNAPSACK
+	 * Return the maximum value that can be put in a knapsack of W capacity 
+	 */
+	public int dpKnapSack(ArrayList <Integer> listOfval, ArrayList <Integer> listOfweight, int index, int tolWeight)
 	{
-		ArrayList <Integer> v = value;
-		ArrayList <Integer> w = weight;
-		int tw = totalWeight;
 		int finalSum = 0;
-		if (w.size() == index || tw == 0)
+		if (listOfweight.size() == index || tolWeight == 0)
 		{
 			return 0;
 		}
 		else
 		{
-			if (w.get(index) > tw)
+			if (listOfweight.get(index) > tolWeight)
 			{
-			return dpKnapSack(v, w, index+1, tw);
+				return dpKnapSack(listOfval, listOfweight, index+1, tolWeight);
 			}
 			else
 			{
-			finalSum =  Math.max(dpKnapSack(v, w, index+ 1 , tw - w.get(index)) + v.get(index), 
-					dpKnapSack(v, w, index+ 1, tw));
+				finalSum =  Math.max(dpKnapSack(listOfval, listOfweight, index + 1, tolWeight - listOfweight.get(index)) + listOfval.get(index), 
+									 dpKnapSack(listOfval, listOfweight, index + 1, tolWeight));
 			}
 			
 		}
@@ -49,70 +45,70 @@ public class KnapSackAlgo
 	//***********************************************************************
 	// END OF DYNAMIC O(N.W) KNAPSACK
 	//***********************************************************************
-	//**************************************************************************
-	// START KNAPSACK Greedy 2-approximation
-	//***************************************************************************
-	public int greedyKnapsack(ArrayList<Integer> value, ArrayList<Integer> weight,int possibleTWeight)
+	/**
+	 * KNAPSACK using Greedy 2-approximation
+	 */
+	public int greedyKnapsack(ArrayList<Integer> listOfval, ArrayList<Integer> weight,int tempWeight)
 	{
-		// Sort value and weight according to v/w ratio
-		 ArrayList<Integer> weightSort = new ArrayList<Integer>();
+		// Sort value and weight according to value/weight ratio
+		 ArrayList<Integer> sortWeightList = new ArrayList<Integer>();
 		 ArrayList<Integer> valueSort = new ArrayList<Integer>();
 		 ArrayList<Integer> G = new ArrayList<Integer>();
 
 		 tempSortObjects = new ArrayList<Double>();
-		 int tw = possibleTWeight;
+		 int tempTolWeight = tempWeight;
 		 int sumOfG = 0;
 		 int maxValue = 0;
-		 weightSort = weight;
-		 valueSort = value;
+		 sortWeightList = weight;
+		 valueSort = listOfval;
 
-		for (int i = 0; i< v.size(); i++)
+		for (int i = 0; i< valList.size(); i++)
 		{
-			double newV = ((double)(v.get(i)))/(double)(w.get(i));
+			double newV = ((double)(valList.get(i)))/(double)(weightList.get(i));
 			tempSortObjects.add(newV);
 		}
 		
 		//Bubble Sort sorting tempSortObjects & weightSort
-		for (int i = 0; i< v.size(); i++)
+		for (int i = 0; i< valList.size(); i++)
 		{
-			for (int j = 0; j <v.size()-1 ; j++)
+			for (int j = 0; j <valList.size()-1 ; j++)
 			{
 				//Swap the indexes
 				if(tempSortObjects.get(j) > tempSortObjects.get(j+1))
 				{
 					double temp = tempSortObjects.get(j);
 					int temp1 = valueSort.get(j);
-					int temp2 = weightSort.get(j);
+					int temp2 = sortWeightList.get(j);
 
 					tempSortObjects.set(j, tempSortObjects.get(j+1));
-					weightSort.set(j, weightSort.get(j+1));
-					valueSort.set(j, weightSort.get(j+1));
-
+					sortWeightList.set(j, sortWeightList.get(j+1));
+					valueSort.set(j, sortWeightList.get(j+1));
 
 					tempSortObjects.set(j+1, temp);
-					weightSort.set(j+1, temp2);	
+					sortWeightList.set(j+1, temp2);	
 					valueSort.set(j+1, temp1);
 
 				}
 			}
 
 		}
-		 maxValue = valueSort.get(0);
+		 
+		maxValue = valueSort.get(0);
 		int i = 0;
 		
-		while(tw > 0 && i < tempSortObjects.size())
+		while(tempTolWeight > 0 && i < tempSortObjects.size())
 		{
-			if (weightSort.get(i) <= tw )
+			if (sortWeightList.get(i) <= tempTolWeight )
 			{
 				G.add(valueSort.get(i));
-				tw = tw - weightSort.get(i);
+				tempTolWeight = tempTolWeight - sortWeightList.get(i);
 			}	
 			i++;
 		}
 
 		for( i = 1; i< valueSort.size(); i++)
 		{
-			if(maxValue < valueSort.get(i))
+			if (maxValue < valueSort.get(i))
 			{
 				maxValue = valueSort.get(i);
 			}
@@ -122,7 +118,6 @@ public class KnapSackAlgo
 		for ( i = 0 ; i < G.size() ; i++)
 		{
 			sumOfG = G.get(i) + sumOfG;
-
 		}
 		
 		if (maxValue > sumOfG)
@@ -134,21 +129,20 @@ public class KnapSackAlgo
 	//**************************************************************************
 	// END KNAPSACK Greedy 2-approximation
 	//***************************************************************************
-	//**************************************************************************
-	// KNAPSACK O(n^2.v(a.max)) dynamic programming based on MinCost version
-	//***************************************************************************
-	
+	/**
+	 * KNAPSACK O(n^2.v(a.max)) dynamic programming based on MinCost version
+	 */
 	public int maxKnapsack(ArrayList<Integer> value, ArrayList<Integer> weight , int totalWeight )
 	{
-		if(originalValue == null)
+		if( originalVal == null)
 		{
-			originalValue = value;
+			originalVal = value;
 		}
 		ArrayList <Integer> v = value;
 		ArrayList <Integer> w = weight;
-		int tw = totalWeight;
 		
 		int i;
+		int tw = totalWeight;
 		int maxValueObj = 0;
 		int nVmax = 0;
 		
@@ -159,7 +153,8 @@ public class KnapSackAlgo
 				maxValueObj = i;
 			}
 		}
-			// [i, t]
+		
+		// [i, t]
 		nVmax = v.size()*v.get(maxValueObj);
 		minCost =  new int  [v.size()][nVmax + 1];
 		take =  new boolean  [v.size()][nVmax + 1];
@@ -169,6 +164,7 @@ public class KnapSackAlgo
 		{
 			minCost[i][0] = 0;
 		}
+		
 		//WHEN TARGET <= V(1), TARGET T CAN BE ACHIEVED BY TAKING OBJECT 1
 		// i represent target
 		for (i = 1 ; i <= v.get(0) ; i++)
@@ -176,12 +172,14 @@ public class KnapSackAlgo
 			minCost[0][i] = w.get(0);
 			take[0][i] = true;	
 		}
+		
 		//When t > v(1), target cannot be reached with only object 1 available
 		for (i =v.get(0)+ 1 ; i <= nVmax ; i++)
 		{
 			minCost[0][i] = Byte.MAX_VALUE;
 			take[0][i] = false;
 		}
+		
 		for (i = 1 ; i < v.size() ; i++)
 		{
 			for ( int t = 1 ; t <= nVmax ; t++)
@@ -209,18 +207,17 @@ public class KnapSackAlgo
 			nVmax--;
 		}
 		
-		 i = v.size()-1;
+		i = v.size()-1;
 		int t = nVmax;
 		
 		while (i >= 0 && t > 0)
 		{
 			if (take[i][t])
 			{
-				solution.add(originalValue.get(i));
+				solution.add(originalVal.get(i));
 				t = t - v.get(i);
 			}
-			i--;
-			
+			i--;	
 		}	
 		
 		int totalValue = 0;
@@ -228,21 +225,20 @@ public class KnapSackAlgo
 		{
 			totalValue = totalValue + solution.get(i);
 		}
-		originalValue = null;
+		originalVal = null;
 		
 		return totalValue;
-
 	}
 	
 	//**************************************************************************
 	// END KNAPSACK O(n^2.v(a.max)) dynamic programming based on MinCost version
 	//***************************************************************************
-	//**************************************************************************
-	// START  FPTAS dynamic programming based on MinCost version
-	//***************************************************************************
+	/**
+	 * START  FPTAS dynamic programming based on MinCost version
+	 */
 	public int knapsackApproxScheme(ArrayList<Integer> value, ArrayList<Integer> weight , int totalWeight , int scaledV )
 	{
-		originalValue = value;
+		originalVal = value;
 		ArrayList <Integer> scale = new ArrayList <Integer>();
 		ArrayList <Integer> w = weight;
 		int tw = totalWeight;

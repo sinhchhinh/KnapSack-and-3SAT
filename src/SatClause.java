@@ -1,8 +1,8 @@
 
 public class SatClause 
 {
-		private String satClause ;
 
+	private String satClause ;
 
 	public SatClause()
 	{
@@ -19,33 +19,33 @@ public class SatClause
 	{
 		return satClause;
 	}
+	
 	public char getCharGiveIndex(int index, SatClause clause)
 	{
 		return (clause.getString()).charAt(index);
 	}
 	
 	
-	public SatClause setCharGiveIndex(int index, String clause, char newV)
+	public SatClause setCharGiveIndex(int index, String clause, char newVal)
 	{	
 		satClause = "";
 		for (int i = 0 ; i < 3; i++)
-			{
-			if (i != index)
-			{
-				if (i <1)
-					satClause = clause.charAt(i) + satClause;
-				else
-					satClause = satClause + clause.charAt(i);
-			}
-			else
-			{
-				if (i <1)
-					satClause = newV + satClause;
-				else
-					satClause = satClause + newV;
-				
-			}
+		{
 			
+				if (i != index)
+				{
+					if (i < 1)
+					satClause = clause.charAt(i) + satClause;
+					else
+					satClause = satClause + clause.charAt(i);
+				}
+				else
+				{
+					if (i < 1)
+					satClause = newVal + satClause;
+					else
+					satClause = satClause + newVal;
+				}
 		}
 		SatClause newValue = new SatClause(satClause);
 		return newValue;

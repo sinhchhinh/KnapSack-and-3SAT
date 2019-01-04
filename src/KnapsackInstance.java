@@ -5,47 +5,51 @@ public class KnapsackInstance
 	private ArrayList <Integer> weight;
 	private ArrayList <Integer> value;
 	private int numOfItems = 0;
-	private int ranOfweight;
-	private int ranOfvalue;
-	private int possibleTotalWeight;
+	private int ranWeight;
+	private int ranVal;
+	private int tolWeight;
 	
 	public KnapsackInstance ()
 	{
 	}
-	//Assign random knapsack value and weight
-	public void assignValue()
+	
+	/**
+	 * Assign random knapsack value and weight
+	 */
+	public void assignVal()
 	{
 		numOfItems = (int) (Math.random() * 90 + 1);
-		weight = new ArrayList <Integer>(numOfItems);
-		value = new ArrayList <Integer>(numOfItems);
-		possibleTotalWeight =  (int) (Math.random() * 50 + 1);
+		weight = new ArrayList <Integer> (numOfItems);
+		value = new ArrayList  <Integer> (numOfItems);
+		tolWeight =  (int) (Math.random() * 50 + 1);
 		
-		for (int i = 0; i< numOfItems ; i++)
+		for (int i = 0; i < numOfItems ; i++)
 		{
-			ranOfweight = (int) (Math.random() * 70 + 1);
-			ranOfvalue = (int) (Math.random() * 70 + 1);
-			weight.add(ranOfweight);
-			value.add(ranOfvalue);
+			ranWeight = (int) (Math.random() * 70 + 1);
+			ranVal = (int) (Math.random() * 70 + 1);
+			value.add(ranVal);
+			weight.add(ranWeight);
 		}
 	}
 
 	public void knapsackToString()
 	{
-		System.out.print("value :  ");
-		for (int i = 0; i< numOfItems ; i++)
+		System.out.print("VALUE : ");
+		for (int i = 0; i < numOfItems ; i++)
 		{
-			System.out.print(" "+value.get(i));
+			System.out.print(" "+ value.get(i));
 		}
+		
 		System.out.print("\n");
-		System.out.print("weight : ");
+		System.out.print("WEIGHT : ");
+		
 		for (int i = 0; i< numOfItems ; i++)
 		{
 			System.out.print(" " + weight.get(i));
-
 		}
+		
 		System.out.print("\n");
-		System.out.println("Total backPack weight : " + possibleTotalWeight);
-
+		System.out.println("Total Back Pack weight : " + tolWeight);
 
 	}
 	
@@ -68,47 +72,47 @@ public class KnapsackInstance
 		this.numOfItems = numOfItems;
 	}
 	public int getRanOfweight() {
-		return ranOfweight;
+		return ranWeight;
 	}
 	public void setRanOfweight(int ranOfweight) {
-		this.ranOfweight = ranOfweight;
+		this.ranWeight = ranOfweight;
 	}
 	public int getRanOfvalue() {
-		return ranOfvalue;
+		return ranVal;
 	}
 	public void setRanOfvalue(int ranOfvalue) {
-		this.ranOfvalue = ranOfvalue;
+		this.ranVal = ranOfvalue;
 	}
 	public int getPossibleTotalWeight() {
-		return possibleTotalWeight;
+		return tolWeight;
 	}
 	public void setPossibleTotalWeight(int possibleTotalWeight) {
-		this.possibleTotalWeight = possibleTotalWeight;
+		this.tolWeight = possibleTotalWeight;
 	}
 	
-	public static int sum (ArrayList <Integer> tInstance)
+	public static int sum (ArrayList <Integer> tolInstance)
 	{
-		int sumValue = 0;
-		for (int j = 0; j < tInstance.size(); j++)
+		int sumVal = 0;
+		for (int j = 0; j < tolInstance.size(); j++)
 		{
-			sumValue+= tInstance.get(j);
+			sumVal+= tolInstance.get(j);
 		}
 		
-		    return sumValue;
+		    return sumVal;
 	}
 	
-	public static double sumDouble (ArrayList <Double> tInstance)
+	public static double sumDouble (ArrayList <Double> tolInstance)
 	{
 		double sumValue = 0;
-		for (int j = 0; j < tInstance.size(); j++)
+		for (int j = 0; j < tolInstance.size(); j++)
 		{
-			sumValue+= tInstance.get(j);
+			sumValue+= tolInstance.get(j);
 		}
 		
 		    return sumValue;
 	}
 	
-	public static void sort (ArrayList <Integer> list)
+	public static void sortInt (ArrayList <Integer> list)
 	{
 		for (int i = 0; i< list.size(); i++)
 		{
@@ -120,8 +124,6 @@ public class KnapsackInstance
 					int temp = list.get(j);
 					list.set(j, list.get(j+1));
 					list.set(j+1, temp);
-					
-
 				}
 			}
 		}
@@ -139,13 +141,14 @@ public class KnapsackInstance
 					double temp = list.get(j);
 					list.set(j, list.get(j+1));
 					list.set(j+1, temp);
-					
-
 				}
 			}
 		}
 	}
-	// MAIN METHOD
+	
+	/**
+	 * MAIN METHOD
+	 */
 	public static void main(String[] args)
 	{
 	
@@ -156,7 +159,7 @@ public class KnapsackInstance
 		ArrayList <Integer> FPTAS = new ArrayList <Integer>();
 		ArrayList <Integer> totalInstanceSize = new ArrayList <Integer>();
 
-		//FOR summing all time used
+		//FOR summing all running time
 		ArrayList <Double> timeDpKnap = new ArrayList <Double>();
 		ArrayList <Double> timeGreedyKnap = new ArrayList <Double>();
 		ArrayList <Double> timePsuedo = new ArrayList <Double>();
@@ -174,7 +177,7 @@ public class KnapsackInstance
 			long endTimeGreedy = 0;
 			long endTimePseudo = 0;
 			long endTimeFPTAS = 0;
-			double totalTime = 0;
+			double tolTime = 0;
 
 
 			int index = 0;
@@ -184,47 +187,46 @@ public class KnapsackInstance
 			int totalFPTAS = 0;
 			
 			KnapsackInstance knapSackInstance = new KnapsackInstance();
-			knapSackInstance.assignValue();
+			knapSackInstance.assignVal();
 			totalInstanceSize.add(h, knapSackInstance.getNumOfItems());
 			KnapSackAlgo ksAlgorithms = new KnapSackAlgo();
 			
 			//Assign value and weight to knapsack
 			
-			//O(nw) Dynamic programming
+			//O(n w) Dynamic programming
 			knapSackInstance.knapsackToString();
 			startDp = System.nanoTime();
-			totalDpKnap = ksAlgorithms.dpKnapSack(knapSackInstance.getValue(), knapSackInstance.getWeight(),index , knapSackInstance.getPossibleTotalWeight());
-			System.out.println("\nMaximum value can be added using O(nw) Dynamic : " + totalDpKnap);
+			totalDpKnap = ksAlgorithms.dpKnapSack(knapSackInstance.getValue(), knapSackInstance.getWeight(), index , knapSackInstance.getPossibleTotalWeight());
 			endTimeDp   = System.nanoTime();
-			totalTime = endTimeDp - startDp;			
-			System.out.println("Total running time for O(nw) Dynamic: " + totalTime + " nanoseconds.\n");
+			tolTime = endTimeDp - startDp;			
+			System.out.println("Total running time for O(n w) Dynamic: " + tolTime + " nanoseconds.\n");
+			System.out.println("\nMaximum value can be added using O(nw) Dynamic : " + totalDpKnap);
 			DpKnap.add(h,totalDpKnap);
-			timeDpKnap.add(h,totalTime);
+			timeDpKnap.add(h,tolTime);
 
 
-			
 			//Greedy 2-approximation
 			knapSackInstance.knapsackToString();
 			startGreedy = System.nanoTime();
 			totalGreedyKnap = ksAlgorithms.greedyKnapsack(knapSackInstance.getValue(), knapSackInstance.getWeight(), knapSackInstance.getPossibleTotalWeight());
 			endTimeGreedy   = System.nanoTime();
-			totalTime = endTimeGreedy - startGreedy; 
-			System.out.println("Total running time for Greedy 2-approximation: " + totalTime + " nanoseconds.\n");
+			tolTime = endTimeGreedy - startGreedy; 
+			System.out.println("Total running time for Greedy 2-approximation: " + tolTime + " nanoseconds.\n");
 			System.out.println("Maximum value can be added using Greedy 2-approximation: " + totalGreedyKnap);
 			GreedyKnap.add(h,totalGreedyKnap);
-			timeGreedyKnap.add(h,totalTime);
+			timeGreedyKnap.add(h,tolTime);
 
 			
 			//Pseudo-polynomial time 
 			knapSackInstance.knapsackToString();
 			startPseudo = System.nanoTime();
 			totalPsuedo = ksAlgorithms.maxKnapsack( knapSackInstance.getValue(), knapSackInstance.getWeight(),knapSackInstance.getPossibleTotalWeight() );
-			endTimePseudo   = System.nanoTime();
-			totalTime = endTimePseudo - startPseudo;
-			System.out.println("Total running time for Pseudo-polynomial time: " + totalTime + " nanoseconds.\n");
+			endTimePseudo = System.nanoTime();
+			tolTime = endTimePseudo - startPseudo;
+			System.out.println("Total running time for Pseudo-polynomial time: " + tolTime + " nanoseconds.\n");
 			System.out.println("Maximum value can be added using Pseudo-polynomial time: " + totalPsuedo);
 			Psuedo.add(h,totalPsuedo);
-			timePsuedo.add(h,totalTime);
+			timePsuedo.add(h,tolTime);
 
 			
 			//FPTAS 
@@ -233,53 +235,50 @@ public class KnapsackInstance
 			startFPTAS = System.nanoTime();
 			totalFPTAS = ksAlgorithms.knapsackApproxScheme( knapSackInstance.getValue(), knapSackInstance.getWeight(),knapSackInstance.getPossibleTotalWeight(), randomScale );
 			endTimeFPTAS   = System.nanoTime();
-			totalTime = endTimeFPTAS - startFPTAS;
-			System.out.println("Total running time for Pseudo-polynomial time: " + totalTime + " nanoseconds.\n");
+			tolTime = endTimeFPTAS - startFPTAS;
+			System.out.println("Total running time for Pseudo-polynomial time: " + tolTime + " nanoseconds.\n");
 			System.out.println("Maximum value can be added using FPTAS : " + totalFPTAS);
 			FPTAS.add(h,totalFPTAS);
-			timeFPTAS.add(h,totalTime);
+			timeFPTAS.add(h,tolTime);
 
 		}
-		
-		
 		
 			//Average quality of each algorithm
 			System.out.println("Average solution for O(nw) Dynamic programming: " + sum(DpKnap)/sum(totalInstanceSize));
 			System.out.println("Average solution for Greedy 2-approximation: " + sum(GreedyKnap)/sum(totalInstanceSize));
 			System.out.println("Average solution for Pseudo-polynomial time: " +sum(Psuedo)/sum(totalInstanceSize));
 			System.out.println("Average solution for FPTAS :" + sum(FPTAS)/sum(totalInstanceSize));
-			System.out.println("Average instances  :" + sum(totalInstanceSize)/100);
-
-			
-			sort(DpKnap);
-			sort(GreedyKnap);
-			sort(Psuedo);
-			sort(FPTAS);
+			System.out.println("Average instances  :" + sum(totalInstanceSize)/100 + "\n");
+	
+			sortInt(DpKnap);
+			sortInt(GreedyKnap);
+			sortInt(Psuedo);
+			sortInt(FPTAS);
 			
 			//Median quality			
 			System.out.println("Median solution for O(nw) Dynamic programming: " + DpKnap.get(DpKnap.size()/2));
 			System.out.println("Median solution for Greedy 2-approximation: " + GreedyKnap.get(GreedyKnap.size()/2));
 			System.out.println("Median solution for Pseudo-polynomial time: " + Psuedo.get(Psuedo.size()/2));
-			System.out.println("Median solution for FPTAS :" + FPTAS.get(FPTAS.size()/2));
+			System.out.println("Median solution for FPTAS :" + FPTAS.get(FPTAS.size()/2) + "\n");
 
 			//Max quality
 			System.out.println("Max solution for O(nw) Dynamic programming: " + DpKnap.get(0));
 			System.out.println("Max solution for Greedy 2-approximation: " + GreedyKnap.get(0));
 			System.out.println("Max solution for Pseudo-polynomial time: " + Psuedo.get(0));
-			System.out.println("Max solution for FPTAS: " + FPTAS.get(0));
+			System.out.println("Max solution for FPTAS: " + FPTAS.get(0) + "\n");
 
 			
 			//Minimum quality
 			System.out.println("Minimum solution for O(nw) Dynamic programming: " + DpKnap.get(DpKnap.size()-1));
 			System.out.println("Minimum solution for Greedy 2-approximation: " + GreedyKnap.get(GreedyKnap.size()-1));
 			System.out.println("Minimum solution for  Pseudo-polynomial time: " + Psuedo.get(Psuedo.size()-1));
-			System.out.println("Minimum solution for FPTAS: " + FPTAS.get(FPTAS.size()-1));
+			System.out.println("Minimum solution for FPTAS: " + FPTAS.get(FPTAS.size()-1) + "\n");
 
 			//Average runningTime of each algorithm
 			System.out.println("Average solution for O(nw) Dynamic programming: " + sumDouble(timeDpKnap)/sum(totalInstanceSize));
 			System.out.println("Average solution for Greedy 2-approximation: " + sumDouble(timeGreedyKnap)/sum(totalInstanceSize));
 			System.out.println("Average solution for Pseudo-polynomial time " +sumDouble(timePsuedo)/sum(totalInstanceSize));
-			System.out.println("Average solution for FPTAS " + sum(FPTAS)/sumDouble(timeFPTAS));
+			System.out.println("Average solution for FPTAS " + sum(FPTAS)/sumDouble(timeFPTAS) + "\n" );
 
 			sortDouble(timeDpKnap);
 			sortDouble(timeGreedyKnap);
@@ -290,28 +289,20 @@ public class KnapsackInstance
 			System.out.println("Median running time for O(nw) Dynamic programming: " + timeDpKnap.get(timeDpKnap.size()/2));
 			System.out.println("Median running time for Greedy 2-approximation: " + timeGreedyKnap.get(timeGreedyKnap.size()/2));
 			System.out.println("Median running time for Pseudo-polynomial time: " + timePsuedo.get(timePsuedo.size()/2));
-			System.out.println("Median running time for FPTAS :" + timeFPTAS.get(timeFPTAS.size()/2));
+			System.out.println("Median running time for FPTAS :" + timeFPTAS.get(timeFPTAS.size()/2) + "\n" );
 
 			//Max runningTime
 			System.out.println("Max running time for O(nw) Dynamic programming: " + timeDpKnap.get(0));
 			System.out.println("Max running time for Greedy 2-approximation: " + timeGreedyKnap.get(0));
 			System.out.println("Max running time for Pseudo-polynomial time: " + timePsuedo.get(0));
-			System.out.println("Max running time for FPTAS: " + timeFPTAS.get(0));
+			System.out.println("Max running time for FPTAS: " + timeFPTAS.get(0) + "\n" );
 
 			
 			//Min runningTime
 			System.out.println("Minimum running time for O(nw) Dynamic programming: " + timeDpKnap.get(timeDpKnap.size()-1));
 			System.out.println("Minimum running time for Greedy 2-approximation: " + timeGreedyKnap.get(timeGreedyKnap.size()-1));
 			System.out.println("Minimum running time for  Pseudo-polynomial time: " + timePsuedo.get(timePsuedo.size()-1));
-			System.out.println("Minimum running time for FPTAS: " + timeFPTAS.get(timeFPTAS.size()-1));
-
-
-		
-		
-
-		
-		
-
+			System.out.println("Minimum running time for FPTAS: " + timeFPTAS.get(timeFPTAS.size()-1) + "\n");
 
 	}
 
